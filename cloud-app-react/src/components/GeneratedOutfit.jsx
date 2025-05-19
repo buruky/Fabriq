@@ -14,20 +14,20 @@ const GeneratedOutfit = () => {
 
   return (
     <div className="min-h-screen p-6 bg-gray-100 flex flex-col items-center">
-      <h1 className="text-4xl font-bold mb-10">Generated Outfit</h1>
+      <h1 className="text-4xl font-bold mb-28">Generated Outfit</h1>
 
       {/* Two-column layout: Outfit (left) + Goal Fit (right) */}
       <div className="flex flex-row gap-10">
         {/* Outfit stack */}
         <div className="flex flex-col items-center space-y-4">
           {outfit.map((item, index) => (
-            <div key={index} className="bg-white p-2 rounded shadow w-48">
+            <div key={index} className="bg-white p-2 rounded shadow w-48 flex flex-col">
               <img
                 src={item.src}
                 alt={item.alt}
                 className="w-full h-auto object-contain"
               />
-              <p className="mt-2 text-center text-sm">{item.alt}</p>
+              <p className="mt-auto text-center text-sm">{item.alt}</p>
             </div>
           ))}
         </div>
@@ -39,7 +39,7 @@ const GeneratedOutfit = () => {
             alt="Goal Fit"
             className="w-full h-auto object-contain"
           />
-          <p className="mt-4 text-center text-medium">Goal Fit</p>
+          <p className="mt-auto text-center text-lg">Goal Fit</p>
         </div>
       </div>
     </div>

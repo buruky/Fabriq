@@ -48,13 +48,13 @@ const Hero = () => {
                 {/* Clickable Box */}
                 <button
                     onClick={handleFileClick}
-                    className="w-24 h-48 flex items-center justify-center border-2 border-dashed border-gray-400 rounded-medium bg-white overflow-hidden"
+                    className="border-2 border-dashed border-gray-400 rounded-medium bg-white overflow-hidden p-2"
                 >
                     {previewUrl ? (
                         <img
                             src={previewUrl}
                             alt="Goal Fit"
-                            className="w-full h-full object-cover"
+                            className="max-w-xs max-h-[500px] object-contain"
                         />
                     ) : (
                         <DocumentIcon className="w-10 h-10 text-gray-500" />

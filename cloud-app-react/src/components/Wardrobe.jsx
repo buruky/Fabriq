@@ -43,9 +43,9 @@ const Wardrobe = () => {
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
         {images.map((img, idx) => (
-          <div key={idx} className="bg-white p-2 rounded shadow">
+          <div key={idx} className="bg-white p-2 rounded shadow flex flex-col">
             <img src={img.src} alt={img.alt} className="w-full h-auto object-contain" />
-            <p className="mt-2 text-center text-sm">{img.alt}</p>
+            <p className="mt-auto text-center text-lg">{img.alt}</p>
           </div>
         ))}
       </div>
