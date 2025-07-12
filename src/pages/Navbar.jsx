@@ -46,8 +46,14 @@ const Navbar = () => {
                     <Link to="/outfits" onClick={() => setNav(false)}>Outfits</Link>
                 </li>
                 <div className='flex flex-col my-4'>
-                    <button className='bg-transparent text-indigo-600 border border-black-600 px-8 py-3 mb-4'>Sign In</button>
-                    <button className='px-8 py-3'>Sign up</button>
+                    <button className="bg-transparent text-[#a3d8f4] border border-[#a3d8f4] px-8 py-3 mb-4">
+                        Sign In
+                    </button>
+
+                    <button className="bg-[#a3d8f4] text-white px-8 py-3 hover:bg-[#90cfee] transition">
+                        Sign Up
+                    </button>
+
                 </div>
             </ul>
 
