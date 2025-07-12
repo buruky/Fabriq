@@ -13,10 +13,7 @@ import {
 
 
 
-// Example wardrobe items ─ replace once uploads work
-import blackBoots from './closet/blackBoots.jpg';
-import blackJorts from './closet/blackJorts.jpg';
-import redShirt   from './closet/redShirt.jpg';
+
 
 
 

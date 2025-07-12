@@ -1,8 +1,6 @@
-import React from 'react'
 import {useState} from 'react'
 import {MenuIcon, XIcon} from '@heroicons/react/outline'
 import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
     const [nav, setNav] = useState(false)
