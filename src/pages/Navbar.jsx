@@ -6,7 +6,7 @@ const Navbar = () => {
     const [nav, setNav] = useState(false)
     const handleClick = () => setNav(!nav)
     return (
-        <div className='w-screen h-[80px] z-10 bg-zinc-200 fixed drop-shadlow-lg'>
+        <div className='w-screen h-[80px] z-10 bg-neutral-background-light/95 backdrop-blur-md fixed drop-shadow-lg border-b border-neutral-border'>
             <div className='px-2 flex justify-between items-center w-full h-full'>
                 <div className='flex items-center'>
                     <li className="text-3xl font-bold mr-4 sm:text-4xl">
@@ -14,15 +14,15 @@ const Navbar = () => {
                     </li>
                     <ul className='hidden md:flex'>
                         <li><Link to="/">Home</Link></li>
-                        <li><Link to="/wardrobe">Warrobe</Link></li>
+                        <li><Link to="/wardrobe">Wardrobe</Link></li>
                         <li><Link to="/outfits">Outfits</Link></li>
                     </ul>
                 </div>
                 <div className = 'hidden md:flex pr-4'>
-                    <button className = 'border-non bg-transparent text-black mr-4 px-8 py-3'>
+                    <Link to="/login" className = 'border-none bg-transparent text-neutral-text hover:text-primary mr-4 px-8 py-3 transition-colors'>
                         Sign In
-                    </button>
-                    <button className = 'px-8 py-3'>Sign Up</button>
+                    </Link>
+                    <Link to="/register" className = 'btn-primary px-8 py-3'>Sign Up</Link>
                 </div>
                 <div className='md:hidden' onClick={handleClick}>
                     {!nav ? <MenuIcon className='w-5' /> : <XIcon className='w-5' />}
@@ -30,27 +30,27 @@ const Navbar = () => {
                 </div>
             </div>
 
-            <ul className={!nav ? 'hidden' : 'absolute bg-zinc-200 w-full px-8'}>
-                <li className='border-b-2 border-zinc-300 w-full'>
-                    <Link to="/" onClick={() => setNav(false)}>Home</Link>
+            <ul className={!nav ? 'hidden' : 'absolute bg-neutral-background-light/98 backdrop-blur-md w-full px-8 border-b border-neutral-border'}>
+                <li className='border-b-2 border-neutral-border w-full'>
+                    <Link to="/" onClick={() => setNav(false)} className="text-neutral-text hover:text-primary transition-colors">Home</Link>
                 </li>
-                <li className='border-b-2 border-zinc-300 w-full'>
-                    <Link to="/wardrobe" onClick={() => setNav(false)}>Wardrobe</Link>
+                <li className='border-b-2 border-neutral-border w-full'>
+                    <Link to="/wardrobe" onClick={() => setNav(false)} className="text-neutral-text hover:text-primary transition-colors">Wardrobe</Link>
                 </li>
-                <li className='border-b-2 border-zinc-300 w-full'>
-                    <Link to="/new-outfit" onClick={() => setNav(false)}>New Outfit</Link>
+                <li className='border-b-2 border-neutral-border w-full'>
+                    <Link to="/new-outfit" onClick={() => setNav(false)} className="text-neutral-text hover:text-primary transition-colors">New Outfit</Link>
                 </li>
-                <li className='border-b-2 border-zinc-300 w-full'>
-                    <Link to="/outfits" onClick={() => setNav(false)}>Outfits</Link>
+                <li className='border-b-2 border-neutral-border w-full'>
+                    <Link to="/outfits" onClick={() => setNav(false)} className="text-neutral-text hover:text-primary transition-colors">Outfits</Link>
                 </li>
                 <div className='flex flex-col my-4'>
-                    <button className="bg-transparent text-[#a3d8f4] border border-[#a3d8f4] px-8 py-3 mb-4">
+                    <Link to="/login" className="bg-transparent text-primary border-2 border-primary px-8 py-3 mb-4 rounded-xl hover:bg-primary/10 transition-all text-center font-semibold" onClick={() => setNav(false)}>
                         Sign In
-                    </button>
+                    </Link>
 
-                    <button className="bg-[#a3d8f4] text-white px-8 py-3 hover:bg-[#90cfee] transition">
+                    <Link to="/register" className="btn-primary px-8 py-3 text-center" onClick={() => setNav(false)}>
                         Sign Up
-                    </button>
+                    </Link>
 
                 </div>
             </ul>

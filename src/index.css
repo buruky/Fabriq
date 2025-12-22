@@ -2,16 +2,222 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Fabriq CSS Variables - Earthy & Sophisticated Dark Mode */
+:root {
+  /* Brand Colors - Sage & Earth Tones */
+  --color-primary: #A8B5A4;
+  --color-primary-dark: #8B9688;
+  --color-primary-light: #B5C1B3;
+
+  --color-secondary: #9CA89B;
+  --color-secondary-dark: #7A8A78;
+  --color-secondary-light: #A8B5A4;
+
+  --color-accent: #E8D973;
+  --color-accent-dark: #D4C25F;
+  --color-accent-light: #F4E893;
+
+  /* Neutral Colors - Dark Mode */
+  --color-background: #1A1D1A;
+  --color-background-light: #242724;
+  --color-text: #E8EAE8;
+  --color-text-light: #A8ADA8;
+  --color-border: #3A3D3A;
+
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+
+  /* Border Radius - More refined */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-full: 9999px;
+
+  /* Shadows - Elegant depth */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
 @layer base {
-  li {
-    @apply p-4;
+  /* Global Body Styles - Dark Mode */
+  body {
+    @apply bg-neutral-background text-neutral-text;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   }
 
-  button {
-    @apply text-white bg-[#7cb5d4] border border-[#a3d8f4] rounded-md transition;
+  /* Headings - Dark Mode */
+  h1 {
+    @apply text-4xl font-bold text-neutral-text;
   }
 
-  button:hover {
-    @apply bg-transparent text-[#a3d8f4];
+  h2 {
+    @apply text-3xl font-semibold text-neutral-text;
+  }
+
+  h3 {
+    @apply text-2xl font-semibold text-neutral-text;
+  }
+
+  h4 {
+    @apply text-xl font-semibold text-neutral-text;
+  }
+
+  /* Links - Dark Mode */
+  a {
+    @apply text-primary hover:text-primary-light transition-colors;
+  }
+}
+
+@layer components {
+  /* Button Variants - Sleek & Elegant */
+  .btn-primary {
+    @apply px-8 py-3.5 bg-gradient-to-r from-primary to-primary-dark text-white
+           rounded-xl font-semibold text-sm tracking-wide
+           shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40
+           hover:scale-105 active:scale-95
+           transition-all duration-300 ease-out
+           disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100;
+  }
+
+  .btn-secondary {
+    @apply px-8 py-3.5 bg-gradient-to-r from-secondary to-secondary-dark text-white
+           rounded-xl font-semibold text-sm tracking-wide
+           shadow-lg shadow-secondary/30 hover:shadow-xl hover:shadow-secondary/40
+           hover:scale-105 active:scale-95
+           transition-all duration-300 ease-out;
+  }
+
+  .btn-accent {
+    @apply px-8 py-3.5 bg-gradient-to-r from-accent to-accent-dark text-white
+           rounded-xl font-semibold text-sm tracking-wide
+           shadow-lg shadow-accent/30 hover:shadow-xl hover:shadow-accent/40
+           hover:scale-105 active:scale-95
+           transition-all duration-300 ease-out;
+  }
+
+  .btn-outline {
+    @apply px-8 py-3.5 bg-white border-2 border-primary text-primary
+           rounded-xl font-semibold text-sm tracking-wide
+           hover:bg-primary hover:text-white hover:border-primary
+           hover:shadow-lg hover:shadow-primary/20
+           transition-all duration-300 ease-out;
+  }
+
+  .btn-ghost {
+    @apply px-6 py-2.5 text-neutral-text rounded-lg font-medium text-sm
+           hover:bg-neutral-background-light transition-all duration-200;
+  }
+
+  /* Card Styles - Dark Mode */
+  .card {
+    @apply bg-neutral-background-light rounded-2xl shadow-lg p-6
+           border border-neutral-border
+           transition-all duration-300;
+  }
+
+  .card-hover {
+    @apply bg-neutral-background-light rounded-2xl shadow-lg p-6
+           border border-neutral-border
+           hover:shadow-2xl hover:border-primary/30 hover:-translate-y-1
+           transition-all duration-300 ease-out cursor-pointer;
+  }
+
+  .card-gradient {
+    @apply bg-gradient-to-br from-neutral-background-light to-neutral-background rounded-2xl shadow-xl p-6
+           border border-neutral-border
+           hover:shadow-2xl hover:border-primary/30
+           transition-all duration-300 cursor-pointer;
+  }
+
+  /* Input Styles - Dark Mode */
+  .input {
+    @apply w-full px-4 py-3 border border-neutral-border rounded-xl
+           bg-neutral-background-light text-neutral-text placeholder-neutral-text-muted
+           focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary
+           transition-all duration-200;
+  }
+
+  .input-error {
+    @apply w-full px-4 py-3 border-2 border-red-500/50 rounded-xl
+           bg-red-950/20 text-neutral-text placeholder-red-400/50
+           focus:outline-none focus:ring-2 focus:ring-red-500/30 focus:border-red-500
+           transition-all duration-200;
+  }
+
+  /* Badge Styles - Modern pills */
+  .badge {
+    @apply inline-flex items-center px-3 py-1 text-xs font-medium rounded-full
+           transition-all duration-200;
+  }
+
+  .badge-primary {
+    @apply bg-primary/10 text-primary border border-primary/20;
+  }
+
+  .badge-secondary {
+    @apply bg-secondary/10 text-secondary border border-secondary/20;
+  }
+
+  .badge-accent {
+    @apply bg-accent/10 text-accent border border-accent/20;
+  }
+
+  .badge-success {
+    @apply bg-green-100 text-green-700 border border-green-200;
+  }
+
+  .badge-warning {
+    @apply bg-yellow-100 text-yellow-700 border border-yellow-200;
+  }
+
+  .badge-error {
+    @apply bg-red-100 text-red-700 border border-red-200;
+  }
+
+  /* Typography Utilities */
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent;
+  }
+
+  .text-gradient-primary {
+    @apply bg-gradient-to-r from-primary to-primary-dark bg-clip-text text-transparent;
+  }
+
+  /* Loading Animation */
+  @keyframes shimmer {
+    0% {
+      background-position: -1000px 0;
+    }
+    100% {
+      background-position: 1000px 0;
+    }
+  }
+
+  .shimmer {
+    animation: shimmer 2s infinite;
+    background: linear-gradient(
+      to right,
+      #f6f7f8 0%,
+      #edeef1 20%,
+      #f6f7f8 40%,
+      #f6f7f8 100%
+    );
+    background-size: 1000px 100%;
+  }
+
+  /* Glass Effect - Dark Mode */
+  .glass {
+    @apply bg-neutral-background-light/80 backdrop-blur-xl border border-neutral-border/50 shadow-2xl;
+  }
+
+  .glass-dark {
+    @apply bg-neutral-background/90 backdrop-blur-xl border border-neutral-border/30 shadow-2xl;
   }
 }
