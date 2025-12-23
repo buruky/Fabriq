@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { auth } from '../../services/supabase';
 
 const LoginForm = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -13,9 +15,9 @@ const LoginForm = () => {
     setLoading(true);
 
     try {
-      const { data, error } = await auth.signIn(email, password);
+      const { error } = await auth.signIn(email, password);
       if (error) throw error;
-      // Handle successful login (redirect, etc.)
+      navigate('/dashboard');
     } catch (err) {
       setError(err.message);
     } finally {

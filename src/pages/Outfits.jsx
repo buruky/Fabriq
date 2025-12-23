@@ -1,9 +1,21 @@
 import { Link } from 'react-router-dom';
 import EmptyState from '../components/shared/EmptyState';
+import { useAuth } from '../hooks/useAuth';
+import { useOutfits } from '../hooks/useOutfits';
 
 const Outfits = () => {
-  // TODO: Replace with actual outfits data from API/state
-  const outfits = [];
+  const { user } = useAuth();
+  const { outfits, loading } = useOutfits(user?.id);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-neutral-background via-neutral-background-light to-neutral-background">
+        <div className="container mx-auto px-6 py-12">
+          <div className="text-center py-12">Loading your outfits...</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-neutral-background via-neutral-background-light to-neutral-background">
@@ -47,13 +59,25 @@ const Outfits = () => {
         {/* Outfits Grid */}
         {outfits.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* TODO: Map through outfits and display cards */}
-            {outfits.map((outfit, idx) => (
-              <div key={idx} className="card-hover">
-                <div className="aspect-square bg-gray-100 rounded-xl mb-4"></div>
-                <h3 className="text-lg font-semibold text-neutral-text mb-2">{outfit.name}</h3>
-                <p className="text-sm text-neutral-text-muted">{outfit.occasion}</p>
-              </div>
+            {outfits.map((outfit) => (
+              <Link
+                key={outfit.id}
+                to={`/outfits/${outfit.id}`}
+                className="card-hover block"
+              >
+                <div className="glass rounded-2xl p-6">
+                  <h3 className="text-lg font-semibold text-neutral-text mb-2">{outfit.name}</h3>
+                  {outfit.notes && (
+                    <p className="text-sm text-neutral-text-muted mb-2">{outfit.notes}</p>
+                  )}
+                  <p className="text-xs text-neutral-text-muted">
+                    {outfit.clothing_item_ids?.length || 0} items
+                  </p>
+                  <p className="text-xs text-neutral-text-muted mt-1">
+                    Created {new Date(outfit.created_at).toLocaleDateString()}
+                  </p>
+                </div>
+              </Link>
             ))}
           </div>
         ) : (

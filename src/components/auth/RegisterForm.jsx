@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { auth } from '../../services/supabase';
 
 const RegisterForm = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
@@ -14,9 +16,9 @@ const RegisterForm = () => {
     setLoading(true);
 
     try {
-      const { data, error } = await auth.signUp(email, password, username);
+      const { error } = await auth.signUp(email, password, username);
       if (error) throw error;
-      // Handle successful registration
+      navigate('/dashboard');
     } catch (err) {
       setError(err.message);
     } finally {

@@ -3,15 +3,16 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css'; // ✅ Tailwind styles must be imported before App
 import App from './App';
-import { UserProvider } from './context/UserContext'; // ✅ Your context
+
+// Clear old localStorage/IndexedDB data (one-time migration)
+// IMPORTANT: Comment out this import after first run to avoid clearing data every time
+// import './util/clearOldData';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
   <React.StrictMode>
-    <UserProvider>
-      <App />
-    </UserProvider>
+    <App />
   </React.StrictMode>
 );
 

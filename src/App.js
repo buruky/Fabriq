@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useAuth } from './hooks/useAuth';
 
 // Components
 import Navbar from './components/shared/Navbar';
@@ -15,21 +15,23 @@ import OutfitCreate from './pages/OutfitCreate';
 import Profile from './pages/Profile';
 import GeneratedOutfit from './pages/GeneratedOutfit';
 
-// Auth (will integrate with Supabase later)
-const ProtectedRoute = ({ children }) => {
-  const [user, setUser] = useState(null);
+const ProtectedRoute = ({ children, isAuthenticated, loading }) => {
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
 
-  // TODO: Replace with actual Supabase auth check
-  // For now, we'll allow access to see the design
-  return children;
+  return isAuthenticated ? children : <Navigate to="/login" replace />;
 };
 
 function App() {
-  const [user, setUser] = useState(null);
+  const { user, loading, signOut, isAuthenticated } = useAuth();
 
-  const handleLogout = () => {
-    // TODO: Implement Supabase logout
-    setUser(null);
+  const handleLogout = async () => {
+    await signOut();
   };
 
   return (
@@ -46,7 +48,7 @@ function App() {
           <Route
             path="/dashboard"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute isAuthenticated={isAuthenticated} loading={loading}>
                 <Dashboard />
               </ProtectedRoute>
             }
@@ -54,31 +56,31 @@ function App() {
           <Route
             path="/wardrobe"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute isAuthenticated={isAuthenticated} loading={loading}>
                 <Wardrobe />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/outfits"
-            element={
-              <ProtectedRoute>
-                <Outfits />
               </ProtectedRoute>
             }
           />
           <Route
             path="/outfits/create"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute isAuthenticated={isAuthenticated} loading={loading}>
                 <OutfitCreate />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/outfits"
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated} loading={loading}>
+                <Outfits />
               </ProtectedRoute>
             }
           />
           <Route
             path="/generated-outfit"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute isAuthenticated={isAuthenticated} loading={loading}>
                 <GeneratedOutfit />
               </ProtectedRoute>
             }
@@ -86,7 +88,7 @@ function App() {
           <Route
             path="/profile"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute isAuthenticated={isAuthenticated} loading={loading}>
                 <Profile />
               </ProtectedRoute>
             }

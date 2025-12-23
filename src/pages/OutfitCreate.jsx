@@ -1,24 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import OutfitCreator from '../components/outfits/OutfitCreator';
-import { db } from '../services/supabase';
+import { getWardrobe } from '../util/storage';
+import { useAuth } from '../hooks/useAuth';
 
 const OutfitCreate = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [clothingItems, setClothingItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadClothingItems();
-  }, []);
+    if (user?.id) {
+      loadClothingItems();
+    }
+  }, [user]);
 
   const loadClothingItems = async () => {
     try {
-      // TODO: Get current user ID
-      const userId = '';
-      const { data, error } = await db.clothing.getAll(userId);
-      if (error) throw error;
-      setClothingItems(data || []);
+      const items = await getWardrobe(user.id);
+      setClothingItems(items || []);
     } catch (err) {
       console.error('Error loading items:', err);
     } finally {
@@ -48,7 +49,7 @@ const OutfitCreate = () => {
         </div>
       ) : (
         <OutfitCreator
-          userId="" // TODO: Get current user ID
+          userId={user?.id}
           clothingItems={clothingItems}
           onSuccess={handleSuccess}
         />
