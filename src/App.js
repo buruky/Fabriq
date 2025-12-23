@@ -12,6 +12,7 @@ import Dashboard from './pages/Dashboard';
 import Wardrobe from './pages/Wardrobe';
 import Outfits from './pages/Outfits';
 import OutfitCreate from './pages/OutfitCreate';
+import OutfitDetail from './pages/OutfitDetail';
 import Profile from './pages/Profile';
 import GeneratedOutfit from './pages/GeneratedOutfit';
 
@@ -66,6 +67,14 @@ function App() {
             element={
               <ProtectedRoute isAuthenticated={isAuthenticated} loading={loading}>
                 <OutfitCreate />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/outfits/:id"
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated} loading={loading}>
+                <OutfitDetail />
               </ProtectedRoute>
             }
           />

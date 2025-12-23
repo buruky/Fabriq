@@ -73,7 +73,17 @@ export const useOutfits = (userId) => {
         db.clothing.getById(id)
       );
       const itemResults = await Promise.all(itemPromises);
-      const items = itemResults.map(result => result.data).filter(Boolean);
+
+      // Transform database format to frontend format
+      const items = itemResults
+        .map(result => result.data)
+        .filter(Boolean)
+        .map(item => ({
+          id: item.id,
+          src: item.image_url || item.src,
+          alt: item.name || item.alt,
+          type: item.category || item.type
+        }));
 
       return { outfit: { ...outfit, items }, error: null };
     } catch (err) {
