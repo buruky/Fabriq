@@ -1,20 +1,37 @@
 // src/pages/Home.jsx
-import React, { useContext, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useContext, useRef, useState } from 'react';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { DocumentIcon } from '@heroicons/react/outline';
-
 import { getWardrobe } from '../util/storage';
 import { generateOutfit } from '../ai/generateOutfit';
 import { UserContext } from '../context/UserContext';
+import { useAuth } from '../hooks/useAuth';
+import backgroundImage from '../assets/background.jpg';
 
 const Home = () => {
   const { currentUser = 'guest' } = useContext(UserContext);
+  const location = useLocation();
   const navigate = useNavigate();
+  const { signOut } = useAuth();
 
   const fileInputRef = useRef(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
   const [prompt, setPrompt] = useState('');
+
+  const navItems = [
+    { name: 'HOME', path: '/dashboard' },
+    { name: 'WARDROBE', path: '/wardrobe' },
+    { name: 'OUTFITS', path: '/outfits' },
+    { name: 'PROFILE', path: '/profile' }
+  ];
+
+  const isActive = (path) => location.pathname === path;
+
+  const handleLogout = async () => {
+    await signOut();
+    navigate('/');
+  };
 
   const handleFileClick = () => fileInputRef.current?.click();
 
@@ -48,49 +65,95 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <div className="flex flex-col items-center space-y-6 p-6 bg-white rounded shadow-lg w-full max-w-md">
-        <h1 className="text-2xl font-bold text-gray-800">Goal Outfit</h1>
+    <div className="relative min-h-screen w-full overflow-hidden">
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{ backgroundImage: `url(${backgroundImage})` }}
+      >
+        <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]"></div>
+      </div>
 
-        {/* Upload Area */}
-        <input
-          type="file"
-          accept="image/*"
-          ref={fileInputRef}
-          onChange={handleFileChange}
-          style={{ display: 'none' }}
-        />
-        <button
-          onClick={handleFileClick}
-          className="w-full h-48 border-2 border-dashed border-gray-400 flex items-center justify-center bg-white rounded hover:bg-gray-50"
-        >
-          {previewUrl ? (
-            <img
-              src={previewUrl}
-              alt="Inspo Preview"
-              className="h-full object-contain"
-            />
-          ) : (
-            <DocumentIcon className="w-10 h-10 text-gray-500" />
-          )}
-        </button>
+      <div className="relative z-10 min-h-screen">
+        {/* Top Left Navigation */}
+        <nav className="fixed left-8 top-8 z-20">
+          <ul className="space-y-4">
+            {navItems.map((item) => (
+              <li key={item.name}>
+                <Link
+                  to={item.path}
+                  className={`block text-sm tracking-[0.2em] transition-all duration-300 hover:text-white hover:tracking-[0.3em] ${
+                    isActive(item.path)
+                      ? 'text-white font-medium'
+                      : 'text-white/60'
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              </li>
+            ))}
 
-        {/* Prompt Input */}
-        <input
-          type="text"
-          placeholder="Describe your outfit goal..."
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-          className="w-full px-4 py-2 border border-gray-300 rounded shadow-sm focus:ring focus:ring-blue-200"
-        />
+            {/* Separator Line */}
+            <li className="py-2">
+              <div className="w-full h-px bg-white/20"></div>
+            </li>
 
-        {/* Generate Button */}
-        <button
-          onClick={handleGenerate}
-          className="w-full bg-black text-white px-6 py-2 rounded hover:bg-gray-800 transition"
-        >
-          Generate Outfit
-        </button>
+            {/* Logout Button */}
+            <li>
+              <button
+                onClick={handleLogout}
+                className="block text-sm tracking-[0.2em] transition-all duration-300 hover:text-white hover:tracking-[0.3em] text-white/60"
+              >
+                LOGOUT
+              </button>
+            </li>
+          </ul>
+        </nav>
+
+        <div className="flex items-center justify-center min-h-screen px-4">
+          <div className="flex flex-col items-center space-y-6 p-6 sm:p-8 bg-black/30 backdrop-blur-md border border-white/10 rounded-3xl w-full max-w-md">
+          <h1 className="text-2xl sm:text-3xl text-white tracking-tight" style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: '500' }}>Goal Outfit</h1>
+
+          {/* Upload Area */}
+          <input
+            type="file"
+            accept="image/*"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            style={{ display: 'none' }}
+          />
+          <button
+            onClick={handleFileClick}
+            className="w-full h-48 border-2 border-dashed border-white/30 flex items-center justify-center bg-white/5 rounded-xl hover:bg-white/10 hover:border-white/40 transition-all backdrop-blur-sm"
+          >
+            {previewUrl ? (
+              <img
+                src={previewUrl}
+                alt="Inspo Preview"
+                className="h-full object-contain"
+              />
+            ) : (
+              <DocumentIcon className="w-10 h-10 text-white/60" />
+            )}
+          </button>
+
+          {/* Prompt Input */}
+          <input
+            type="text"
+            placeholder="Describe your outfit goal..."
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            className="w-full px-4 py-3 border border-white/20 rounded-xl bg-black/30 backdrop-blur-sm text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/40 transition-all"
+          />
+
+          {/* Generate Button */}
+          <button
+            onClick={handleGenerate}
+            className="w-full px-6 py-3 bg-white/10 text-white rounded-xl hover:bg-white/20 transition-all backdrop-blur-sm border border-white/20 tracking-[0.1em] text-sm font-medium"
+          >
+            Generate Outfit
+          </button>
+          </div>
+        </div>
       </div>
     </div>
   );

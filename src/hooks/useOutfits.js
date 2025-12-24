@@ -68,22 +68,25 @@ export const useOutfits = (userId) => {
       const { data: outfit, error: outfitError } = await db.outfits.getById(outfitId);
       if (outfitError) throw outfitError;
 
-      // Fetch all clothing items for this outfit
-      const itemPromises = outfit.clothing_item_ids.map(id =>
-        db.clothing.getById(id)
-      );
-      const itemResults = await Promise.all(itemPromises);
+      if (!outfit.clothing_item_ids || outfit.clothing_item_ids.length === 0) {
+        return { outfit: { ...outfit, items: [] }, error: null };
+      }
+
+      // Fetch all clothing items in a single query using .in()
+      const { data: clothingItems, error: itemsError } = await db.clothing.getByIds(outfit.clothing_item_ids);
+
+      if (itemsError) {
+        console.error('Error fetching clothing items:', itemsError);
+        return { outfit: { ...outfit, items: [] }, error: itemsError };
+      }
 
       // Transform database format to frontend format
-      const items = itemResults
-        .map(result => result.data)
-        .filter(Boolean)
-        .map(item => ({
-          id: item.id,
-          src: item.image_url || item.src,
-          alt: item.name || item.alt,
-          type: item.category || item.type
-        }));
+      const items = (clothingItems || []).map(item => ({
+        id: item.id,
+        src: item.image_url,
+        alt: item.name,
+        type: item.category
+      }));
 
       return { outfit: { ...outfit, items }, error: null };
     } catch (err) {

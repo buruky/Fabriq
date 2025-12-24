@@ -23,7 +23,7 @@ const GeneratedOutfit = () => {
 
   return (
     <div className="min-h-screen p-6 bg-gray-100 flex flex-col items-center">
-      <h1 className="text-4xl font-bold mb-4 text-center">Generated Outfit</h1>
+      <h1 className="text-4xl mb-4 text-center" style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: '500' }}>Generated Outfit</h1>
 
       <p className="text-md italic text-gray-600 mb-10 max-w-xl text-center">
         Based on your prompt: “{prompt}”

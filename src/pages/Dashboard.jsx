@@ -1,104 +1,93 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
+import backgroundImage from '../assets/background.jpg';
 
 const Dashboard = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { signOut } = useAuth();
+
+  const navItems = [
+    { name: 'HOME', path: '/dashboard' },
+    { name: 'WARDROBE', path: '/wardrobe' },
+    { name: 'OUTFITS', path: '/outfits' },
+    { name: 'PROFILE', path: '/profile' }
+  ];
+
+  const isActive = (path) => location.pathname === path;
+
+  const handleLogout = async () => {
+    await signOut();
+    navigate('/');
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-neutral-background via-neutral-background-light to-neutral-background">
-      <div className="container mx-auto px-6 py-12">
-        {/* Header */}
-        <div className="mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold mb-3">
-            Your <span className="text-gradient-primary">Dashboard</span>
-          </h1>
-          <p className="text-neutral-text-muted text-lg">Welcome back! Here's your wardrobe overview.</p>
-        </div>
+    <div className="relative min-h-screen w-full overflow-hidden">
+      {/* Background Image with Overlay */}
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{ backgroundImage: `url(${backgroundImage})` }}
+      >
+        <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]"></div>
+      </div>
 
-        {/* Stats Cards */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {/* Total Items Card */}
-          <div className="group relative bg-gradient-to-br from-primary/10 to-primary/5 backdrop-blur-sm rounded-2xl p-6 border border-primary/20 hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-1 transition-all duration-300">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-primary to-primary-dark rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
-                <span className="text-white text-2xl">👕</span>
-              </div>
-              <div className="text-xs text-primary font-semibold bg-primary/10 px-3 py-1 rounded-full">
-                +0%
-              </div>
-            </div>
-            <h3 className="text-neutral-text-muted text-sm font-medium mb-1">Total Items</h3>
-            <p className="text-4xl font-bold text-neutral-text">0</p>
-            <p className="text-xs text-neutral-text-muted mt-2">Clothing items in wardrobe</p>
-          </div>
+      {/* Content */}
+      <div className="relative z-10 min-h-screen flex flex-col">
+        {/* Top Left Navigation */}
+        <nav className="fixed left-8 top-8 z-20">
+          <ul className="space-y-4">
+            {navItems.map((item) => (
+              <li key={item.name}>
+                <Link
+                  to={item.path}
+                  className={`block text-sm tracking-[0.2em] transition-all duration-300 hover:text-white hover:tracking-[0.3em] ${
+                    isActive(item.path)
+                      ? 'text-white font-medium'
+                      : 'text-white/60'
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              </li>
+            ))}
 
-          {/* Total Outfits Card */}
-          <div className="group relative bg-gradient-to-br from-secondary/10 to-secondary/5 backdrop-blur-sm rounded-2xl p-6 border border-secondary/20 hover:shadow-xl hover:shadow-secondary/10 hover:-translate-y-1 transition-all duration-300">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-secondary to-secondary-dark rounded-xl flex items-center justify-center shadow-lg shadow-secondary/20">
-                <span className="text-white text-2xl">✨</span>
-              </div>
-              <div className="text-xs text-secondary font-semibold bg-secondary/10 px-3 py-1 rounded-full">
-                +0%
-              </div>
-            </div>
-            <h3 className="text-neutral-text-muted text-sm font-medium mb-1">Total Outfits</h3>
-            <p className="text-4xl font-bold text-neutral-text">0</p>
-            <p className="text-xs text-neutral-text-muted mt-2">Saved outfit combinations</p>
-          </div>
+            {/* Separator Line */}
+            <li className="py-2">
+              <div className="w-full h-px bg-white/20"></div>
+            </li>
 
-          {/* Categories Card */}
-          <div className="group relative bg-gradient-to-br from-accent/10 to-accent/5 backdrop-blur-sm rounded-2xl p-6 border border-accent/20 hover:shadow-xl hover:shadow-accent/10 hover:-translate-y-1 transition-all duration-300">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-accent to-accent-dark rounded-xl flex items-center justify-center shadow-lg shadow-accent/20">
-                <span className="text-white text-2xl">📂</span>
-              </div>
-              <div className="text-xs text-accent font-semibold bg-accent/10 px-3 py-1 rounded-full">
-                All
-              </div>
-            </div>
-            <h3 className="text-neutral-text-muted text-sm font-medium mb-1">Categories</h3>
-            <p className="text-4xl font-bold text-neutral-text">0</p>
-            <p className="text-xs text-neutral-text-muted mt-2">Different item types</p>
-          </div>
-        </div>
+            {/* Logout Button */}
+            <li>
+              <button
+                onClick={handleLogout}
+                className="block text-sm tracking-[0.2em] transition-all duration-300 hover:text-white hover:tracking-[0.3em] text-white/60"
+              >
+                LOGOUT
+              </button>
+            </li>
+          </ul>
+        </nav>
 
-        {/* Quick Actions */}
-        <div>
-          <h2 className="text-2xl font-bold mb-6 text-neutral-text">Quick Actions</h2>
-          <div className="grid md:grid-cols-2 gap-6">
-            {/* Add Clothing Item */}
-            <Link
-              to="/wardrobe/add"
-              className="group relative glass rounded-2xl p-8 overflow-hidden hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
+        {/* Center Content */}
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center px-8">
+            {/* Main Title */}
+            <h1
+              className="text-[clamp(4rem,15vw,12rem)] tracking-tight leading-none mb-8"
+              style={{
+                fontFamily: "'Playfair Display', serif",
+                fontWeight: '600',
+                letterSpacing: '0.05em',
+                color: 'white'
+              }}
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div className="relative">
-                <div className="text-6xl mb-4 group-hover:scale-110 transition-transform duration-300">➕</div>
-                <h3 className="text-2xl font-bold text-neutral-text mb-2">Add Clothing Item</h3>
-                <p className="text-neutral-text-muted">Upload photos and organize your wardrobe</p>
-              </div>
-            </Link>
+              FABRIQ.
+            </h1>
 
-            {/* Create Outfit */}
-            <Link
-              to="/outfits/create"
-              className="group relative glass rounded-2xl p-8 overflow-hidden hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-secondary/5 to-secondary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div className="relative">
-                <div className="text-6xl mb-4 group-hover:scale-110 transition-transform duration-300">✨</div>
-                <h3 className="text-2xl font-bold text-neutral-text mb-2">Create Outfit</h3>
-                <p className="text-neutral-text-muted">Mix and match items to create new looks</p>
-              </div>
-            </Link>
-          </div>
-        </div>
-
-        {/* Recent Activity Section (Placeholder) */}
-        <div className="mt-12">
-          <h2 className="text-2xl font-bold mb-6 text-neutral-text">Recent Activity</h2>
-          <div className="glass rounded-2xl p-8 text-center">
-            <div className="text-6xl mb-4 opacity-50">📊</div>
-            <p className="text-neutral-text-muted">Your recent wardrobe activity will appear here</p>
+            {/* Tagline */}
+            <p className="text-white/80 text-sm md:text-base tracking-[0.3em] font-light">
+              Curate your style, one piece at a time.
+            </p>
           </div>
         </div>
       </div>

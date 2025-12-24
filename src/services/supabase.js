@@ -75,6 +75,14 @@ export const db = {
       return { data, error }
     },
 
+    getByIds: async (ids) => {
+      const { data, error } = await supabase
+        .from('clothing_items')
+        .select('*')
+        .in('id', ids)
+      return { data, error }
+    },
+
     create: async (item) => {
       const { data, error } = await supabase
         .from('clothing_items')

@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from './hooks/useAuth';
 
 // Components
@@ -28,6 +28,87 @@ const ProtectedRoute = ({ children, isAuthenticated, loading }) => {
   return isAuthenticated ? children : <Navigate to="/login" replace />;
 };
 
+const AppContent = ({ user, handleLogout, isAuthenticated, loading }) => {
+  const location = useLocation();
+  // Hide navbar on all authenticated pages (they have left sidebar navigation)
+  const authenticatedPages = ['/dashboard', '/wardrobe', '/outfits', '/profile', '/outfits/create', '/generated-outfit'];
+  const hideNavbar = location.pathname === '/' ||
+                     authenticatedPages.some(page => location.pathname.startsWith(page));
+
+  return (
+    <div className="min-h-screen bg-neutral-background">
+      {!hideNavbar && <Navbar user={user} onLogout={handleLogout} />}
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/" element={<Landing />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+
+        {/* Protected Routes */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute isAuthenticated={isAuthenticated} loading={loading}>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/wardrobe"
+          element={
+            <ProtectedRoute isAuthenticated={isAuthenticated} loading={loading}>
+              <Wardrobe />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/outfits/create"
+          element={
+            <ProtectedRoute isAuthenticated={isAuthenticated} loading={loading}>
+              <OutfitCreate />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/outfits/:id"
+          element={
+            <ProtectedRoute isAuthenticated={isAuthenticated} loading={loading}>
+              <OutfitDetail />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/outfits"
+          element={
+            <ProtectedRoute isAuthenticated={isAuthenticated} loading={loading}>
+              <Outfits />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/generated-outfit"
+          element={
+            <ProtectedRoute isAuthenticated={isAuthenticated} loading={loading}>
+              <GeneratedOutfit />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute isAuthenticated={isAuthenticated} loading={loading}>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Fallback */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </div>
+  );
+};
+
 function App() {
   const { user, loading, signOut, isAuthenticated } = useAuth();
 
@@ -37,76 +118,12 @@ function App() {
 
   return (
     <Router>
-      <div className="min-h-screen bg-neutral-background">
-        <Navbar user={user} onLogout={handleLogout} />
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<Landing />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-
-          {/* Protected Routes */}
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute isAuthenticated={isAuthenticated} loading={loading}>
-                <Dashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/wardrobe"
-            element={
-              <ProtectedRoute isAuthenticated={isAuthenticated} loading={loading}>
-                <Wardrobe />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/outfits/create"
-            element={
-              <ProtectedRoute isAuthenticated={isAuthenticated} loading={loading}>
-                <OutfitCreate />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/outfits/:id"
-            element={
-              <ProtectedRoute isAuthenticated={isAuthenticated} loading={loading}>
-                <OutfitDetail />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/outfits"
-            element={
-              <ProtectedRoute isAuthenticated={isAuthenticated} loading={loading}>
-                <Outfits />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/generated-outfit"
-            element={
-              <ProtectedRoute isAuthenticated={isAuthenticated} loading={loading}>
-                <GeneratedOutfit />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute isAuthenticated={isAuthenticated} loading={loading}>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
-
-          {/* Fallback */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </div>
+      <AppContent
+        user={user}
+        handleLogout={handleLogout}
+        isAuthenticated={isAuthenticated}
+        loading={loading}
+      />
     </Router>
   );
 }

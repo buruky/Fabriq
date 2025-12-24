@@ -1,14 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import OutfitCreator from '../components/outfits/OutfitCreator';
 import { getWardrobe } from '../util/storage';
 import { useAuth } from '../hooks/useAuth';
+import backgroundImage from '../assets/background.jpg';
 
 const OutfitCreate = () => {
+  const location = useLocation();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const [clothingItems, setClothingItems] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const navItems = [
+    { name: 'HOME', path: '/dashboard' },
+    { name: 'WARDROBE', path: '/wardrobe' },
+    { name: 'OUTFITS', path: '/outfits' },
+    { name: 'PROFILE', path: '/profile' }
+  ];
+
+  const isActive = (path) => location.pathname === path;
+
+  const handleLogout = async () => {
+    await signOut();
+    navigate('/');
+  };
 
   useEffect(() => {
     if (user?.id) {
@@ -27,33 +43,86 @@ const OutfitCreate = () => {
     }
   };
 
-  const handleSuccess = (outfit) => {
+  const handleSuccess = () => {
     navigate('/outfits');
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8">Create New Outfit</h1>
+    <div className="relative min-h-screen w-full overflow-hidden">
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{ backgroundImage: `url(${backgroundImage})` }}
+      >
+        <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]"></div>
+      </div>
 
-      {loading ? (
-        <div className="text-center py-12">Loading your wardrobe...</div>
-      ) : clothingItems.length === 0 ? (
-        <div className="text-center py-12">
-          <p className="text-gray-500 mb-4">You need to add clothing items first!</p>
-          <button
-            onClick={() => navigate('/wardrobe/add')}
-            className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark"
-          >
-            Add Items
-          </button>
+      <div className="relative z-10 min-h-screen">
+        {/* Top Left Navigation */}
+        <nav className="fixed left-8 top-8 z-20">
+          <ul className="space-y-4">
+            {navItems.map((item) => (
+              <li key={item.name}>
+                <Link
+                  to={item.path}
+                  className={`block text-sm tracking-[0.2em] transition-all duration-300 hover:text-white hover:tracking-[0.3em] ${
+                    isActive(item.path)
+                      ? 'text-white font-medium'
+                      : 'text-white/60'
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              </li>
+            ))}
+
+            {/* Separator Line */}
+            <li className="py-2">
+              <div className="w-full h-px bg-white/20"></div>
+            </li>
+
+            {/* Logout Button */}
+            <li>
+              <button
+                onClick={handleLogout}
+                className="block text-sm tracking-[0.2em] transition-all duration-300 hover:text-white hover:tracking-[0.3em] text-white/60"
+              >
+                LOGOUT
+              </button>
+            </li>
+          </ul>
+        </nav>
+
+        <div className="container mx-auto px-4 py-8">
+          <h1 className="text-3xl mb-8 text-white tracking-tight" style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: '500' }}>Create New Outfit</h1>
+
+          {loading ? (
+            <div className="text-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-white/60 mx-auto mb-4"></div>
+              <p className="text-white/80 tracking-[0.1em] text-sm">Loading your wardrobe...</p>
+            </div>
+          ) : clothingItems.length === 0 ? (
+            <div className="bg-black/30 backdrop-blur-md border border-white/10 rounded-2xl p-8 sm:p-16 text-center">
+              <div className="text-5xl sm:text-7xl mb-4 sm:mb-6">👔</div>
+              <h3 className="text-xl sm:text-2xl font-light text-white mb-2">No Items in Wardrobe</h3>
+              <p className="text-sm sm:text-base text-white/60 mb-6 sm:mb-8 max-w-md mx-auto px-4 tracking-[0.05em]">
+                You need to add clothing items first before creating an outfit!
+              </p>
+              <button
+                onClick={() => navigate('/wardrobe')}
+                className="px-6 py-3 bg-white/10 text-white rounded-xl hover:bg-white/20 transition-all backdrop-blur-sm border border-white/20 tracking-[0.1em] text-sm"
+              >
+                Go to Wardrobe
+              </button>
+            </div>
+          ) : (
+            <OutfitCreator
+              userId={user?.id}
+              clothingItems={clothingItems}
+              onSuccess={handleSuccess}
+            />
+          )}
         </div>
-      ) : (
-        <OutfitCreator
-          userId={user?.id}
-          clothingItems={clothingItems}
-          onSuccess={handleSuccess}
-        />
-      )}
+      </div>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { db } from '../../services/supabase';
 import { CLOTHING_CATEGORIES, getCategoryByName, getSortedCategories } from '../../config/categories';
 
