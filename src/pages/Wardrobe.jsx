@@ -212,12 +212,15 @@ const Wardrobe = () => {
                 <li key={item.name}>
                   <Link
                     to={item.path}
-                    className={`block text-sm tracking-[0.2em] transition-all duration-300 hover:text-white hover:tracking-[0.3em] ${
+                    className={`block text-sm tracking-[0.2em] transition-all duration-300 hover:text-[#A8B5A4] hover:tracking-[0.3em] relative ${
                       isActive(item.path)
-                        ? 'text-white font-medium'
+                        ? 'text-[#A8B5A4] font-medium'
                         : 'text-white/60'
                     }`}
                   >
+                    {isActive(item.path) && (
+                      <span className="absolute -left-4 top-1/2 -translate-y-1/2 w-2 h-2 bg-[#A8B5A4] rounded-full"></span>
+                    )}
                     {item.name}
                   </Link>
                 </li>
@@ -271,7 +274,7 @@ const Wardrobe = () => {
             {/* Upload button */}
             <button
               onClick={() => setShowModal(true)}
-              className="px-6 py-3 bg-white/10 text-white rounded-xl hover:bg-white/20 transition-all backdrop-blur-sm border border-white/20 tracking-[0.1em] text-sm flex items-center justify-center gap-2 w-full sm:w-auto"
+              className="px-6 py-3 bg-[#A8B5A4] text-white rounded-xl hover:bg-[#8B9688] transition-all shadow-lg shadow-[#A8B5A4]/30 hover:shadow-xl hover:shadow-[#A8B5A4]/40 tracking-[0.1em] text-sm flex items-center justify-center gap-2 w-full sm:w-auto font-semibold"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -347,7 +350,7 @@ const Wardrobe = () => {
               </p>
               <button
                 onClick={() => setShowModal(true)}
-                className="px-6 py-3 bg-white/10 text-white rounded-xl hover:bg-white/20 transition-all backdrop-blur-sm border border-white/20 tracking-[0.1em] text-sm w-full sm:w-auto"
+                className="px-6 py-3 bg-[#A8B5A4] text-white rounded-xl hover:bg-[#8B9688] transition-all shadow-lg shadow-[#A8B5A4]/30 hover:shadow-xl hover:shadow-[#A8B5A4]/40 tracking-[0.1em] text-sm w-full sm:w-auto font-semibold"
               >
                 Add Your First Item
               </button>
