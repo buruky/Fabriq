@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
-import { auth } from '../services/supabase';
+import { auth, db } from '../services/supabase';
+import { getWardrobe } from '../util/storage';
 import backgroundImage from '../assets/background.jpg';
 
 const Profile = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
-  const [stats] = useState({
+  const [stats, setStats] = useState({
     totalItems: 0,
     totalOutfits: 0,
     itemsByCategory: {}
@@ -36,8 +37,24 @@ const Profile = () => {
       const { user: currentUser } = await auth.getCurrentUser();
       setUser(currentUser);
 
-      // TODO: Load stats
-      // const { data, error } = await fetch stats from API
+      // Load real stats from wardrobe and outfits
+      if (currentUser?.id) {
+        const wardrobeItems = await getWardrobe(currentUser.id);
+        const { data: outfits } = await db.outfits.getAll(currentUser.id);
+
+        // Calculate items by category
+        const itemsByCategory = wardrobeItems.reduce((acc, item) => {
+          const category = item.type || 'Other';
+          acc[category] = (acc[category] || 0) + 1;
+          return acc;
+        }, {});
+
+        setStats({
+          totalItems: wardrobeItems.length,
+          totalOutfits: (outfits || []).length,
+          itemsByCategory
+        });
+      }
     } catch (err) {
       console.error('Error loading profile:', err);
     } finally {
@@ -181,7 +198,9 @@ const Profile = () => {
               <div className="text-center p-4 bg-white/5 rounded-xl border border-white/10 backdrop-blur-sm col-span-2 md:col-span-1">
                 <div className="text-3xl mb-2">📅</div>
                 <p className="text-white/60 text-sm font-medium mb-1 tracking-[0.05em]">Member Since</p>
-                <p className="text-lg font-light text-white">2024</p>
+                <p className="text-lg font-light text-white">
+                  {user?.created_at ? new Date(user.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : '2024'}
+                </p>
               </div>
             </div>
           </div>

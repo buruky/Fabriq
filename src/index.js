@@ -1,7 +1,7 @@
 // src/index.js
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css'; // ✅ Tailwind styles must be imported before App
+import './index.css'; 
 import App from './App';
 
 // Clear old localStorage/IndexedDB data (one-time migration)

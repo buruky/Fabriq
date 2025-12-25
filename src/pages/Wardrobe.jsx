@@ -297,18 +297,19 @@ const Wardrobe = () => {
                 </h2>
                 <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6">
                   {filteredGroups[type].map((item, idx) => (
-                    <div key={idx} className="group relative overflow-hidden w-full bg-black/30 backdrop-blur-md border border-white/10 rounded-xl hover:bg-black/40 hover:border-white/20 transition-all">
-                      {/* Image Container */}
-                      <div className="relative aspect-square bg-white/5 rounded-t-xl overflow-hidden mb-3">
+                    <div key={idx} className="group relative w-full aspect-square bg-white/5 backdrop-blur-xl border border-white/20 rounded-2xl hover:bg-white/10 hover:border-[#A8B5A4]/40 transition-all shadow-lg hover:shadow-2xl hover:shadow-[#A8B5A4]/20 duration-300 overflow-hidden">
+                      {/* Image Container - Centered by default */}
+                      <div className="absolute inset-0 flex items-center justify-center p-6 transition-all duration-300 group-hover:p-4 group-hover:items-start">
                         <img
                           src={item.src}
                           alt={item.alt}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          className="max-w-full max-h-full object-contain transition-transform duration-500 group-hover:scale-95"
+                          style={{ filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.3))' }}
                         />
                       </div>
 
-                      {/* Item Details */}
-                      <div className="w-full px-3 pb-3">
+                      {/* Item Details - Slides up from bottom on hover */}
+                      <div className="absolute bottom-0 left-0 right-0 px-3 pb-3 pt-20 bg-gradient-to-t from-black/90 via-black/60 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-300">
                         <p className="text-center text-sm sm:text-base font-medium text-white mb-1 truncate">{item.alt}</p>
                         <p className="text-center text-xs sm:text-sm text-white/60 mb-3 tracking-[0.05em]">{item.type}</p>
 
@@ -316,7 +317,7 @@ const Wardrobe = () => {
                         <div className="flex gap-2 w-full">
                           <button
                             onClick={() => handleEdit(item)}
-                            className="flex-1 px-2 sm:px-3 py-2 rounded-lg text-xs font-medium bg-white/10 text-white hover:bg-white/20 transition-colors flex items-center justify-center gap-1 border border-white/10"
+                            className="flex-1 px-2 sm:px-3 py-2 rounded-lg text-xs font-medium bg-[#A8B5A4]/20 text-white hover:bg-[#A8B5A4]/30 transition-colors flex items-center justify-center gap-1 border border-[#A8B5A4]/30"
                           >
                             <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
